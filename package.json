@@ -1,0 +1,26 @@
+{
+  "name": "Arrebol",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec 'node --experimental-modules' app.js",
+    "start": "node --experimental-modules app.js",
+    "debug": "node --nolazy --inspect-brk=9229 app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "fs": "^0.0.1-security",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.5.13",
+    "morgan": "^1.9.1",
+    "node-cron": "^2.0.3",
+    "nodemon": "^1.19.1",
+    "path": "^0.12.7"
+  }
+}
