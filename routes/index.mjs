@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const __dirname = process.env.PWD + '/routers';
+const __dirname = process.env.PWD + '/routes';
 
 export default app => {
   fs
