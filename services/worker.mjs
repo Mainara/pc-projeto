@@ -9,17 +9,21 @@ export default class Worker {
     }
 
     runTask = async (task) => {
-        this.busy = true;
 
-        console.log("Executanto task referente ao job "  + task.jobId + " ...");
+        console.log("Executanto task referente ao job "  + task.jobId + " no worker " + this.id + "...");
         const commands = await Command.find({taskId: task._id});
         const promises = commands.map(async (currentCommand) => { 
+            currentCommand.state = 'RUNNING';
+            await currentCommand.save();
+
             console.log("Executanto comando "  + currentCommand.command + " ...");
-            return this.sleep(2000);
+            await this.sleep(2000);
+
+            currentCommand.state = 'FINISHED';
+            currentCommand.exit_code = 0;
+            return await currentCommand.save();
         });
         await Promise.all(promises);
-
-        this.busy = false;
     }
 
     sleep(ms) {
