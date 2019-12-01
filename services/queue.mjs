@@ -1,3 +1,5 @@
+import Worker from './worker.mjs';
+
 const queues = {};
 
 export const createNewQueue = async (name) => {
@@ -17,8 +19,13 @@ export const getQueueById = async (id) => {
     }
 }
 
-export const addWorkerPool = async (address, poolSize, queueId) => {
-    // TODO
+export const addWorkerPool = async (workerJson, queueId) => {
+    const queue = queues[queueId];
+    const { address } = workerJson
+    const worker = new Worker(address);
+
+    queue.workers.push(worker);
+    return worker.id;
 }
 
 export const getWorkers = async (queueId) => {

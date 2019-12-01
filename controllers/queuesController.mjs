@@ -20,7 +20,8 @@ export const getQueueByID = async (req, res) => {
 }
 
 export const addNewWorker = async (req, res) => {
-    const id = await addWorkerPool(req.address, req.pool_size, req.params.queue_id);
+    const { body } = req;
+    const id = await addWorkerPool(body, req.params.queue_id);
     res.send({id: id})
 }
 
