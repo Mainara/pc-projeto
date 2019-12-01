@@ -1,4 +1,4 @@
-import { runInThisContext } from "vm";
+import Command from '../models/commands.mjs';
 
 export default class Worker {
 
@@ -12,9 +12,10 @@ export default class Worker {
         this.busy = true;
 
         console.log("Executanto task referente ao job "  + task.jobId + " ...");
-        const promises = task.commands.map(async (currentCommand) => { 
+        const commands = await Command.find({taskId: task._id});
+        const promises = commands.map(async (currentCommand) => { 
             console.log("Executanto comando "  + currentCommand.command + " ...");
-            return sleep(2000);
+            return this.sleep(2000);
         });
         await Promise.all(promises);
 

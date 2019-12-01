@@ -10,7 +10,7 @@ function schedule(queue) {
 
     tasks.forEach(async taskId => {
         const task = await Task.findById(taskId);
-        
+
         queue.workers.some(worker => {
             if (!worker.busy) {
                 worker.runTask(task);

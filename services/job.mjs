@@ -20,12 +20,11 @@ export const submitNewJob = async (queueId, jobJSON) => {
             return command;
         });
 
-        return await Promise.all(commands);
+        await Promise.all(commands);
+        return task;
     });
 
     tasks = await Promise.all(tasks);
-    console.log(queue);
-
     queue.waiting_jobs += tasks.length;
     tasks.forEach(task => {
         queue.tasks.push(task._id);
