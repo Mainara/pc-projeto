@@ -2,18 +2,21 @@ import { createNewQueue, getQueues, getQueueById,
     addWorkerPool, getWorkers, removeWorker } from '../services/queue.mjs';
 
 export const createQueue = async (req, res) => {
-    const id = await createNewQueue(req.name);
+    const { body } = req;
+    const { name } = body;
+    const id = await createNewQueue(name);
     res.send({id: id});
 }
 
 export const getQueue = async (req, res) => {
     const queues = await getQueues();
-    res.send(JSON.stringify(queues));
+    res.send(queues);
 }
 
 export const getQueueByID = async (req, res) => {
     const queue = await getQueueById(req.params.queue_id);
-    res.send(JSON.stringify(queue));
+
+    res.send(queue);
 }
 
 export const addNewWorker = async (req, res) => {

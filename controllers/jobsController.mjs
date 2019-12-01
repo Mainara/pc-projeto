@@ -1,7 +1,8 @@
 import { submitNewJob, getJobStatus } from '../services/job.mjs';
 
 export const newJob = async (req, res) => {
-    const id = await submitNewJob(req.params.queue_id, req.label, req.tasks);
+    const { body } = req;
+    const id = await submitNewJob(req.params.queue_id, body);
     res.send({id: id});
 }
 
