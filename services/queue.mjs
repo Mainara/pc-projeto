@@ -4,7 +4,7 @@ const queues = {};
 
 export const createNewQueue = async (name) => {
     const id = `${name}-${Math.random()*100}`;
-    const queue = {id: id, name: name, tasks: [], workers: [], waiting_jobs: 0, worker_pools: 0, pools_size: 0}
+    const queue = {id: id, name: name, tasks: [], workers: [], jobs_id: [], waiting_jobs: 0, worker_pools: 0, pools_size: 0}
     queues[id] = queue;
     return id;
 }
@@ -29,9 +29,18 @@ export const addWorkerPool = async (workerJson, queueId) => {
 }
 
 export const getWorkers = async (queueId) => {
-    // TODO
+    const queue = await getQueueById(queueId);
+    return queue.workers;
 }
 
 export const removeWorker = async (queueId, workerId) => {
-    // TODO
+    const queue = await getQueueById(queueId);
+    var worker = queue.workers.filter(worker => {
+        return worker.id === workerId
+      })
+    var index = queue.workers.indexOf(worker);
+    if (index > -1) {
+        queue.workers.splice(index, 1);
+    }
+    return true;
 }

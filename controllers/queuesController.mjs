@@ -26,10 +26,11 @@ export const addNewWorker = async (req, res) => {
 }
 
 export const getWorkersFromQueue = async (req, res) => {
-    const id = await getWorkers(req.params.queue_id);
-    res.send({id: id});
+    const workers = await getWorkers(req.params.queue_id);
+    res.send(JSON.stringify(workers));
 }
 
 export const deleteWorker = async (req, res) => {
     await removeWorker(req.params.queue_id, req.params.worker_id);
+    res.send({msg: 'worker ' + req.params.worker_id + ' removed'});
 }
