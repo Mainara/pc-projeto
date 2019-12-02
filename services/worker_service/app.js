@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 workerRoute(app);
 
-const PORT = 8081;
+const PORT = process.argv[2] || 8081;
 
 app.listen(PORT, () => {
     console.log('CORS-enabled web server listening on port ' + PORT);

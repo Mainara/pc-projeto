@@ -4,7 +4,6 @@ class Worker {
 
     constructor() {
         this.busy = false;
-        this.id = `${Math.random()*100}-${Math.random()*200}`;
     }
 
     runTask = async (task) => {
@@ -22,7 +21,7 @@ class Worker {
 
             currentCommand.state = 'FINISHED';
             currentCommand.exit_code = 0;
-            return await currentCommand.save();
+            await currentCommand.save();
         }
 
         this.busy = false;

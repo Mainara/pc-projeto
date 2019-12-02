@@ -3,6 +3,6 @@ import { runTask } from '../controllers/workerController.mjs';
 
 const router = express.Router();
 
-router.post('/runTask', runTask);
+router.post('/run-task', runTask);
 
 export default app => app.use('/worker', router);

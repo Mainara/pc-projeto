@@ -1,21 +1,28 @@
 import Task from '../models/task.mjs';
 import Job from '../models/job.mjs';
+import request from 'request';
 
 async function execute(task, worker, queue) {
     worker.busy = true;
-    const job = await Job.findById(task.jobId);
+    // const job = await Job.findById(task.jobId);
     
     task.state = "RUNNING";
     await task.save();
 
-    await worker.runTask(task);
+    request.post({
+        url: 'http://localhost:8082/worker/run-task',
+        body: JSON.stringify({ task: task._id }),
+        headers: {
+            'Content-Type': 'application/json'   
+        }
+    }, async (error, response, body) => {
 
-    task.state = "FINISHED";
-    await task.save();
+        task.state = "FINISHED";
+        await task.save();
 
-    worker.busy = false;
-
-    schedule(queue);
+        worker.busy = false;
+        schedule(queue);
+    });
 }
 
 function schedule(queue) {
