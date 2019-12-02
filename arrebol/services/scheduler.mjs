@@ -40,6 +40,7 @@ function execute(task, worker, queue) {
                 await Job.updateOne({ _id: task.jobId }, { state: 'FINISHED' }, { runValidators: true });
             }
 
+            queue.waiting_jobs--;
             worker.busy = false;
             schedule(queue);
         });

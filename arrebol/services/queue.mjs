@@ -15,13 +15,15 @@ export const getQueues = async () => {
 }
 
 export const getQueueById = async (id) => {
-    if (id in queues) {
-        return queues[id];
+    if (!(id in queues)) {
+        throw { message: "Queue not found" };
     }
+
+    return queues[id];
 }
 
 export const addWorkerPool = async (workerJson, queueId) => {
-    const queue = queues[queueId];
+    const queue = await getQueueById(queueId);
     const { address } = workerJson
     const worker = new Worker(address);
 

@@ -14,23 +14,44 @@ export const getQueue = async (req, res) => {
 }
 
 export const getQueueByID = async (req, res) => {
-    const queue = await getQueueById(req.params.queue_id);
+    
+    try {
+        const queue = await getQueueById(req.params.queue_id);
 
-    res.send(queue);
+        if (!queue) {
+            return res.status(404).send({ message: "Queue not found" });
+        }
+
+        res.send(queue);
+    } catch(e) {
+        res.status(400).send({ message: e.message });
+    }
 }
 
 export const addNewWorker = async (req, res) => {
-    const { body } = req;
-    const id = await addWorkerPool(body, req.params.queue_id);
-    res.send({id: id})
+    try {
+        const { body } = req;
+        const id = await addWorkerPool(body, req.params.queue_id);
+        res.send({id: id});
+    } catch(e) {
+        res.status(400).send({ message: e.message });
+    }
 }
 
 export const getWorkersFromQueue = async (req, res) => {
-    const workers = await getWorkers(req.params.queue_id);
-    res.send(workers);
+    try {
+        const workers = await getWorkers(req.params.queue_id);
+        res.send(workers);
+    } catch(e) {
+        res.status(400).send({ message: e.message });
+    }
 }
 
 export const deleteWorker = async (req, res) => {
-    await removeWorker(req.params.queue_id, req.params.worker_id);
-    res.send({msg: 'worker ' + req.params.worker_id + ' removed'});
+    try {
+        await removeWorker(req.params.queue_id, req.params.worker_id);
+        res.send({msg: 'worker ' + req.params.worker_id + ' removed'});
+    } catch(e) {
+        res.status(400).send({ message: e.message });
+    }
 }
