@@ -6,8 +6,18 @@ function execute(task, worker, queue) {
     worker.busy = true;
     // const job = await Job.findById(task.jobId);
     
-    task.state = "RUNNING";
-    task.save().then(() => {
+    Task.updateOne({
+        _id: task._id,
+        state: {
+            $eq: 'READY'
+        }
+    }, {state: 'RUNNING'}, { runValidators: true }).then((response) => {
+        if (response.nModified == 0) {
+            worker.busy = false;
+            schedule(queue);
+            return;
+        }
+
         request.post({
             url: `${worker.address}/worker/run-task`,
             body: JSON.stringify({ task: task._id }),
@@ -19,8 +29,9 @@ function execute(task, worker, queue) {
                 console.log(error);
             }
     
-            task.state = "FINISHED";
-            await task.save();
+            await Task.updateOne({
+                _id: task._id
+            }, {state: 'FINISHED'}, { runValidators: true });
     
             worker.busy = false;
             schedule(queue);
@@ -34,7 +45,7 @@ function schedule(queue) {
     tasks.forEach(async taskId => {
         const task = await Task.findById(taskId);
 
-        queue.workers.forEach(worker => {
+        queue.workers.some(worker => {
             if (task.state == 'READY' && !worker.busy) {
                 execute(task, worker, queue);
                 return task;
