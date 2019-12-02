@@ -27,7 +27,7 @@ export const addNewWorker = async (req, res) => {
 
 export const getWorkersFromQueue = async (req, res) => {
     const workers = await getWorkers(req.params.queue_id);
-    res.send(JSON.stringify(workers));
+    res.send(workers);
 }
 
 export const deleteWorker = async (req, res) => {
