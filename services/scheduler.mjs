@@ -10,13 +10,16 @@ async function execute(task, worker, queue) {
     await task.save();
 
     request.post({
-        url: 'http://localhost:8082/worker/run-task',
+        url: `${worker.address}/worker/run-task`,
         body: JSON.stringify({ task: task._id }),
         headers: {
             'Content-Type': 'application/json'   
         }
     }, async (error, response, body) => {
-
+        if (error) {
+            console.log(error);
+        }
+        
         task.state = "FINISHED";
         await task.save();
 
