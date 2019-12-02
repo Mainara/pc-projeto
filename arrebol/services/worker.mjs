@@ -1,5 +1,3 @@
-import Command from '../models/commands.mjs';
-
 export default class Worker {
 
     constructor(address) {

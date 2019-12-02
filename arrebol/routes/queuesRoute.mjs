@@ -1,7 +1,6 @@
 import express from 'express';
 import { createQueue, getQueue, getQueueByID, 
     addNewWorker, getWorkersFromQueue, deleteWorker } from '../controllers/queuesController.mjs';
-import { getWorkers } from '../services/queue.mjs';
 
 const router = express.Router();
 
