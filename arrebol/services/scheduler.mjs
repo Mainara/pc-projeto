@@ -17,7 +17,7 @@ function execute(task, worker, queue) {
             return;
         }
 
-        await Job.updateOne({ _id: task.jobId, state: { $eq: 'READY' }}, { state: 'RUNNING' }, { runValidators: true });
+        await Job.updateOne({ _id: task.jobId, state: { $eq: 'QUEUED' }}, { state: 'RUNNING' }, { runValidators: true });
 
         request.post({
             url: `${worker.address}/worker/run-task`,

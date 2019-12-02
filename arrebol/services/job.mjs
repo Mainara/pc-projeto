@@ -99,3 +99,9 @@ export const getJobStatus = async (queueId, jobId) => {
         }
     ]);
 }
+
+export const getJobsFromQueue =  async (queueId, query) => {
+    const queue = await getQueueById(queueId);
+
+    return await Job.find({ _id: { $in: queue.jobs_id }, ...query });
+}

@@ -7,9 +7,9 @@ const jobSchema = db.Schema({
     },
     state: {
         type: String,
-        enum: [ 'READY', 'RUNNING', 'FINISHED' ],
+        enum: [ 'QUEUED', 'RUNNING', 'FINISHED' ],
         required: true,
-        default: 'READY'
+        default: 'QUEUED'
     }
 });
 
