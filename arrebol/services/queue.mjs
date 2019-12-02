@@ -1,4 +1,5 @@
 import Worker from './worker.mjs';
+import Schedule from './scheduler.mjs';
 
 const queues = {};
 
@@ -25,6 +26,8 @@ export const addWorkerPool = async (workerJson, queueId) => {
     const worker = new Worker(address);
 
     queue.workers.push(worker);
+    Schedule(queue);
+
     return worker.id;
 }
 
@@ -35,12 +38,12 @@ export const getWorkers = async (queueId) => {
 
 export const removeWorker = async (queueId, workerId) => {
     const queue = await getQueueById(queueId);
-    var worker = queue.workers.filter(worker => {
-        return worker.id === workerId
-      })
-    var index = queue.workers.indexOf(worker);
+    const index = queue.workers.findIndex(worker => worker.id === workerId);
+
     if (index > -1) {
         queue.workers.splice(index, 1);
     }
+
+    Schedule(queue);
     return true;
 }
