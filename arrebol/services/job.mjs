@@ -38,56 +38,60 @@ export const getJobStatus = async (queueId, jobId) => {
         return null;
     }
 
+    const commandLookup = {
+        $lookup: {
+            from: 'commands',
+            let: { taskId: '$_id' },
+            pipeline: [
+                {
+                    $match: {
+                        $expr: {
+                            $eq: ["$taskId", "$$taskId"]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        taskId: 0,
+                        __v: 0
+                    }
+                }
+            ],
+            as: "commands"
+        }
+    };
+
+    const taskLookup = {
+        $lookup: {
+            from: 'tasks',
+            let: { jobId: '$_id' },
+            pipeline: [
+                {
+                    $match: {
+                        $expr: {
+                            $eq: ["$jobId", "$$jobId"]
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        jobId: 0,
+                        __v: 0
+                    }
+                },
+                commandLookup
+            ],
+            as: "tasks"
+        }
+    };
+
     return await Job.aggregate([
         {
             $match: {
                 _id: db.Types.ObjectId(jobId)
             }
         },
-        {
-            $lookup: {
-                from: 'tasks',
-                let: { jobId: '$_id' },
-                pipeline: [
-                    {
-                        $match: {
-                            $expr: {
-                                $eq: ["$jobId", "$$jobId"]
-                            }
-                        }
-                    },
-                    {
-                        $project: {
-                            jobId: 0,
-                            __v: 0
-                        }
-                    },
-                    {
-                        $lookup: {
-                            from: 'commands',
-                            let: { taskId: '$_id' },
-                            pipeline: [
-                                {
-                                    $match: {
-                                        $expr: {
-                                            $eq: ["$taskId", "$$taskId"]
-                                        }
-                                    }
-                                },
-                                {
-                                    $project: {
-                                        taskId: 0,
-                                        __v: 0
-                                    }
-                                }
-                            ],
-                            as: "commands"
-                        }
-                    }
-                ],
-                as: "tasks"
-            }
-        },
+        taskLookup,
         {
             $project: {
                 __v: 0
