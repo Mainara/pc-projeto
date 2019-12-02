@@ -35,7 +35,7 @@ export const getJobStatus = async (queueId, jobId) => {
     if (queue.jobs_id.includes(jobId)) {
         return await Job.findById(jobId);
     } else {
-        null;
+        return null;
     }
 
 }

@@ -9,7 +9,7 @@ class Worker {
     runTask = async (task) => {
         this.busy = true;
 
-        console.log("Executanto task referente ao job "  + task.jobId + " no worker " + this.id + "...");
+        console.log("Executanto task referente ao job "  + task.jobId + "...");
         const commands = await Command.find({taskId: task._id});
         
         for (let currentCommand of commands) { 
