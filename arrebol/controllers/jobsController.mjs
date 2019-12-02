@@ -8,5 +8,5 @@ export const newJob = async (req, res) => {
 
 export const getJob = async (req, res) => {
     const job = await getJobStatus(req.params.queue_id, req.params.job_id);
-    res.send(JSON.stringify(job));
+    res.send(job);
 }
