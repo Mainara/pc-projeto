@@ -26,14 +26,14 @@
 function schedule(queue) {
 	const tasks = queue.tasks;
 	tasks.forEach(async taskId => {
-	const task = await Task.findById(taskId);
-	queue.workers.some(worker => {
-		if (task.state == 'READY' && !worker.busy) {
-			execute(task, worker, queue);
-			return task;
+	    const task = await Task.findById(taskId);
+	    queue.workers.some(worker => {
+		    if (task.state == 'READY' && !worker.busy) {
+			    execute(task, worker, queue);
+			    return task;
 			}
-	});
-});
+	    });
+    });
 }
 ```
 
